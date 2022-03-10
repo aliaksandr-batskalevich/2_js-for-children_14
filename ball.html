@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ball</title>
+</head>
+<body>
+<canvas id="canvas" width="500" height="300"></canvas>
+<script>
+
+    function Ball() {
+        this.x = 100;
+        this.y = 100;
+        this.xSpeed = setSpeedRandom();
+        this.ySpeed = setSpeedRandom();
+        this.color = setColorRandom();
+    };
+
+    function circle(x, y, radius, fill, color) {
+        ctx.beginPath();
+        ctx.fillStyle = color;
+        ctx.strokeStyle = color;
+        ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+        if (fill === "fill") {
+            ctx.fill();
+        } else if (fill === "stroke") {
+            ctx.stroke();
+        }
+    };
+
+    Ball.prototype.draw = function () {
+        circle(this.x, this.y, 3, "fill", this.color);
+    };
+
+    function setSpeedRandom() {
+        return (Math.random() * 10 - 5);
+    };
+
+    function setColorRandom() {
+        return (color[Math.floor(Math.random() * color.length)]);
+    };
+
+    Ball.prototype.move = function () {
+        this.x += this.xSpeed;
+        this.y += this.ySpeed;
+    };
+
+    Ball.prototype.checkCollision = function () {
+        if (this.x < 0 || this.x > width) {
+            this.xSpeed *= -1;
+        }
+        if (this.y < 0 || this.y > height) {
+            this.ySpeed *= -1;
+        }
+    };
+
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var width = canvas.width;
+    var height = canvas.height;
+    var arrey = [];
+    var color = ["red", "orange", "yellow", "Green", "blue", "purple"];
+
+    for (var i = 0; i < 10; i++) {
+        arrey[i] = new Ball();
+    }
+
+    setInterval(function () {
+        ctx.clearRect(0, 0, width, height);
+        for (var j = 0; j < 10; j++) {
+            arrey[j].draw();
+            arrey[j].move();
+            arrey[j].checkCollision();
+        }
+        ctx.strokeRect(0, 0, width, height);
+    }, 10);
+</script>
+</body>
+</html>
